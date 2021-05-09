@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import styled from 'styled-components'
 import { DateRangeSelect } from '../components/DateRangeSelect'
 
-Modal.setAppElement('#root')
+//Modal.setAppElement('#root')
 
 const StyledModal = styled(Modal)`
     color: black;

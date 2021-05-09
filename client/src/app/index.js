@@ -1,4 +1,3 @@
-import 'jquery/src/jquery';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-date-range/dist/styles.css';
@@ -23,7 +22,9 @@ function App() {
         <Router>
             <StyledHeader>
                 <h1>Welcome to Desk Booking</h1>
-                <h4 className="text-warning">Please select your name from the list, then choose a date/period and then, click on the desk you want booking.</h4>
+                <h4 className="text-warning">
+                    Please select your name from the list, then choose a date/period and then, click on the desk you want booking.
+                </h4>
             </StyledHeader>
             <Route
                 path="/"
