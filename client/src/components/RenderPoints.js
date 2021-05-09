@@ -20,7 +20,7 @@ export const renderPoints = (desks, chooseDesk, users, extraClass) => {
             deskStatus += 'taken'
         }
         return (
-            <React.Fragment>
+            <div key={desk.id}>
                 <div
                     key={'desk' + desk.id}
                     id={'d' + desk.id}
@@ -33,7 +33,7 @@ export const renderPoints = (desks, chooseDesk, users, extraClass) => {
                 {isTaken && <ReactTooltip key={'tooltip'+desk._id} id={'t'+index} place='top' effect='solid'>
                     Booked by: {(takenBy.firstname)} {(takenBy.surname)} until: {takenUntil.toLocaleDateString()}
                 </ReactTooltip>}
-            </React.Fragment>
+            </div>
         )
     })
 }

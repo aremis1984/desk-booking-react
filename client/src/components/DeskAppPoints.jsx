@@ -31,19 +31,19 @@ export const StyledClickPoints = styled.div`
         }
         #d4 {
             height: 6.8%;
-            left: 54.1%;
+            left: 55.1%;
             top: 16.8%;
             width: 3%;
         }
         #d5 {
             height: 6.8%;
-            left: 54.2%;
+            left: 55.2%;
             top: 42.4%;
             width: 3%;
         }
         #d6 {
             height: 7.8%;
-            left: 54.3%;
+            left: 55.3%;
             top: 67.3%;
             width: 3%;
         }

@@ -5,6 +5,15 @@ import ground from "../assets/ground.png"
 import { OverlayDesks, StyledClickPoints } from "../components"
 import { renderPoints } from '../components/RenderPoints'
 
+const StyledNav = styled.nav`
+    position: absolute;
+    width: 100%;
+    .btn-info {
+        width: 49%;
+    }
+`;
+StyledNav.displayName = 'StyledNav'
+
 const StyledImg = styled.div`
     text-align: center;
     img {
@@ -20,8 +29,7 @@ const StyledImg = styled.div`
 StyledImg.displayName = 'StyledImg'
 
 const StyledClickPointsContainer = styled.div`
-    margin: 0 auto;
-    padding: 70px;
+    margin: 30px auto;
     .img-container {
         position: relative;
     }
@@ -51,46 +59,49 @@ export const DesktopApp = (props) => {
     }
     const { desks, chooseDesk, users, selectedUser } = props;
     return(
-        <StyledClickPointsContainer className={'col-xs-12'}>
-            <div className={'d-xs-block d-sm-block d-md-block d-lg-block d-xl-none'}>
-                <button className='btn btn-info' onClick={switchFloor}>Ground Floor</button>
-                <button className='btn btn-info' onClick={switchFloor}>First Floor</button>
-            </div>
-
-            <div className={'img-container d-none d-xl-block'}>
-                <OverlayDesks
-                    loadingDesks={desks.length === 0}
-                    notUserSelected={selectedUser === null}
-                />
-                <StyledClickPoints>
-                    { renderPoints(desks, chooseDesk, users, "desktop") }
-                </StyledClickPoints>
-                <StyledImg>
-                    <img className="img-fluid" src={ground} alt='Ground Floor' />
-                    <img className="img-fluid" src={first} alt='First Floor' />
-                </StyledImg>
-            </div>
-
-            <div className={'img-container d-xs-block d-sm-block d-md-block d-lg-block d-xl-none'}>
-                <OverlayDesks
-                    loadingDesks={desks.length === 0}
-                    notUserSelected={selectedUser === null}
-                />
-                <StyledClickPoints>
-                    {  renderPoints(desks, chooseDesk, users, "mobile") }
-                </StyledClickPoints>
-                {(state.showGround) &&
+        <React.Fragment>
+            <StyledNav className="navbar navbar-light bg-light d-xs-block d-sm-block d-md-block d-lg-block d-xl-none">
+                <div className="container-fluid">
+                    <button className='btn btn-info me-1' onClick={switchFloor}>Ground Floor</button>
+                    <button className='btn btn-info' onClick={switchFloor}>First Floor</button>
+                </div>
+            </StyledNav>
+            <StyledClickPointsContainer className={'col-xs-12'}>
+                <div className={'img-container d-none d-xl-block'}>
+                    <OverlayDesks
+                        loadingDesks={desks.length === 0}
+                        notUserSelected={selectedUser === null}
+                    />
+                    <StyledClickPoints>
+                        { renderPoints(desks, chooseDesk, users, "desktop") }
+                    </StyledClickPoints>
                     <StyledImg>
                         <img className="img-fluid" src={ground} alt='Ground Floor' />
-                    </StyledImg>
-                }
-                {(state.showFirst) &&
-                    <StyledImg>
                         <img className="img-fluid" src={first} alt='First Floor' />
                     </StyledImg>
-                }
-            </div>
-        </StyledClickPointsContainer>
+                </div>
+
+                <div className={'m-5 img-container d-xs-block d-sm-block d-md-block d-lg-block d-xl-none'}>
+                    <OverlayDesks
+                        loadingDesks={desks.length === 0}
+                        notUserSelected={selectedUser === null}
+                    />
+                    <StyledClickPoints>
+                        {  renderPoints(desks, chooseDesk, users, "mobile") }
+                    </StyledClickPoints>
+                    {(state.showGround) &&
+                        <StyledImg>
+                            <img className="img-fluid" src={ground} alt='Ground Floor' />
+                        </StyledImg>
+                    }
+                    {(state.showFirst) &&
+                        <StyledImg>
+                            <img className="img-fluid" src={first} alt='First Floor' />
+                        </StyledImg>
+                    }
+                </div>
+            </StyledClickPointsContainer>
+        </React.Fragment>
     )
 }
 export default DesktopApp
