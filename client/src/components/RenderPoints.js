@@ -15,18 +15,18 @@ export const renderPoints = (desks, chooseDesk, users, extraClass) => {
         })
         let takenUntil = new Date(desk.to)
         let takenByInitials = takenBy && (takenBy.firstname[0] + takenBy.surname[0])
-        let deskStatus = 'point '
+        let deskStatus = 'point'
         if(isTaken) {
-            deskStatus += 'taken'
+            deskStatus += ' taken'
         }
         return (
-            <div key={desk.id}>
+            <div key={desk.id} className={extraClass}>
                 <div
                     key={'desk' + desk.id}
                     id={'d' + desk.id}
                     data-tip=''
                     data-for={'t' + index}
-                    className={deskStatus + ' ' + extraClass}
+                    className={deskStatus}
                     onClick={()=>chooseDesk(deskId)}>
                     <span>{takenByInitials}</span>
                 </div>

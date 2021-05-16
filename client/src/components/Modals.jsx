@@ -12,7 +12,7 @@ const StyledModal = styled(Modal)`
     background-color: white;
     border: 1px solid #a4b3d6;
     padding: 2%;
-    .close-btn {
+    input {
         width: 100%;
     }
 
@@ -38,7 +38,8 @@ export const Modals = (props) => {
             toggleModalOperation,
             verified,
             verifyIdentiy,
-            update
+            update,
+            introducedKey
         } = props
     return (
         <React.Fragment>
@@ -78,7 +79,7 @@ export const Modals = (props) => {
                     By selecting a desk the data will be saved, so FIRST you must choose a period or date.
                 </h3>
                 <br/>
-                <button className={'btn btn-warning close-btn'} onClick={toggleModalWarning}>Close</button>
+                <button className={'btn btn-warning col-md-6 col-xs-12 offset-md-3 close-btn'} onClick={toggleModalWarning}>Close</button>
             </StyledModal>
             <StyledModal
                 isOpen={showModalBooked}
@@ -95,7 +96,7 @@ export const Modals = (props) => {
                     First delete your current desk, then select a new one.
                 </h3>
                 <br/>
-                <button className={'btn btn-warning close-btn'} onClick={toggleModalBooked}>Close</button>
+                <button className={'btn btn-warning col-md-6 col-xs-12 offset-md-3 close-btn'} onClick={toggleModalBooked}>Close</button>
             </StyledModal>
             <StyledModal
                 isOpen={showModalOperation}
@@ -111,11 +112,13 @@ export const Modals = (props) => {
                 <h4 className="text-center">
                     To perform this operation, please enter your employee key:
                 </h4>
-                <input placerholder='Insert your key here' onChange={verifyIdentiy} />
-                {!verified && <span className='small text-danger'>Your key is incorrect, to enable the button introduce the correct one.</span>}
-                <br/>
-                <button className={'btn btn-success save-btn'} disabled={!verified} onClick={update}>Save Changes</button>
-                <button className={'btn btn-warning close-btn'} onClick={toggleModalOperation}>Close</button>
+                <input placerholder='Insert your key here' value={introducedKey} onChange={verifyIdentiy} />
+                {!verified && <p className='small text-danger text-center'>Your key is incorrect, please insert the correct one.</p>}
+                <div className='row mt-3 px-2'>
+                    <button className={'btn btn-success save-btn col-xs-12 mt-1 col-md-5'} onClick={update}>Save Changes</button>
+                    <button className={'btn btn-warning close-btn col-xs-12 mt-1 col-md-5 offset-md-2'} onClick={toggleModalOperation}>Close</button>
+                </div>
+
             </StyledModal>
         </React.Fragment>
     )

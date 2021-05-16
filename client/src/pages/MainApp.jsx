@@ -50,7 +50,9 @@ class MainApp extends Component {
             to: null,
             selectOptions: [],
             selectedUser: null,
-            desks: []
+            desks: [],
+            introducedKey: '',
+            verified: true
         }
         this.setDateRange = this.setDateRange.bind(this)
         this.handleUserChange = this.handleUserChange.bind(this)
@@ -62,6 +64,7 @@ class MainApp extends Component {
         this.toggleModalBooked = this.toggleModalBooked.bind(this)
         this.toggleModalOperation = this.toggleModalOperation.bind(this)
         this.verifyIdentiy = this.verifyIdentiy.bind(this)
+        this.checkKey = this.checkKey.bind(this)
     }
 
      componentDidMount() {
@@ -83,8 +86,7 @@ class MainApp extends Component {
             this.setState({
                 users,
                 selectOptions,
-                loading: false,
-                verified: false
+                loading: false
             })
         }).catch((err)=>{
                 NotificationManager.error('Error', 'Can not get employees', 5000)
@@ -110,7 +112,7 @@ class MainApp extends Component {
 
     handleUserChange (selectedUser) {
         const { desks } = this.state
-        let deskData = desks.find((desk, i) => {
+        let deskData = selectedUser && desks.find((desk, i) => {
             return desk.booked_by === selectedUser.value
         })
 
@@ -141,29 +143,42 @@ class MainApp extends Component {
 
     update () {
         const { desks, selectedUser, from, to, deskId, isFree } = this.state
-        let desk = null
-        if(deskId){
-            desk = desks.find((desk, i) => {
-                return desk.id === deskId
-            })
-        }else {
-            desk = desks.find((desk, i) => {
-                return desk.booked_by === selectedUser.value
-            })
-        }
 
-        const update = Object.assign({}, desk)
-        update.booked_by = isFree ? -1 : selectedUser.value
-        update.from = from
-        update.to = to
-        return api.updateDesk(desk.id, update).then(() => {
-            NotificationManager.success('Success', 'Desktop reservation updated')
+        if(this.checkKey()) {
+            let desk = null
+            if(deskId){
+                desk = desks.find((desk, i) => {
+                    return desk.id === deskId
+                })
+            }else {
+                desk = desks.find((desk, i) => {
+                    return desk.booked_by === selectedUser.value
+                })
+            }
+
+            const update = Object.assign({}, desk)
+            update.booked_by = isFree ? -1 : selectedUser.value
+            update.from = from
+            update.to = to
+            
+            return api.updateDesk(desk.id, update).then(() => {
+                NotificationManager.success('Success', 'Desktop reservation updated')
+                this.toggleModalOperation()
+                this.getDesks()
+            }).catch((err)=>{
+                    NotificationManager.error('Error', 'Can not get Desks list', 5000)
+            })
+        } else {
             this.setState({ verified: false })
-            this.toggleModalOperation()
-            this.getDesks()
-        }).catch((err)=>{
-                NotificationManager.error('Error', 'Can not get Desks list', 5000)
-        })
+        }
+    }
+
+    checkKey() {
+        const { selectedUser, users, introducedKey } = this.state
+        const currentUser = users.find((user, i) => 
+            user.id === selectedUser.value
+        )
+        return (introducedKey === currentUser.key)
     }
 
     chooseDesk (deskId) {
@@ -183,15 +198,11 @@ class MainApp extends Component {
     }
 
     verifyIdentiy (ev) {
-        const { selectedUser, users } = this.state
-        const currentUser = users.find((user, i) => 
-            user.id === selectedUser.value
-        )
-        ev.target.value === currentUser.key && this.setState({ verified: true })
+        this.setState({ introducedKey: ev.target.value })
     }
 
     toggleModalOperation (isFree = false) {
-        this.setState({ showModalOperation: !this.state.showModalOperation, isFree })
+        this.setState({ showModalOperation: !this.state.showModalOperation, isFree, introducedKey: '' })
     }
 
     toggleModalWarning () {
@@ -215,7 +226,8 @@ class MainApp extends Component {
             showModalBooked,
             showModalOperation,
             verified,
-            deskId
+            deskId,
+            introducedKey
         } = this.state;
         let haveDesk = selectedUser && desks.find((desk, i) => {
             return desk.booked_by === selectedUser.value
@@ -267,6 +279,7 @@ class MainApp extends Component {
                     toggleCalendar={this.toggleCalendar}
                     verified={verified}
                     update={this.update}
+                    introducedKey={introducedKey}
                     toggleModalOperation={this.toggleModalOperation}
                     verifyIdentiy={this.verifyIdentiy}
                 />

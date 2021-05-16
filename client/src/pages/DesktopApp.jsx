@@ -44,26 +44,29 @@ export const DesktopApp = (props) => {
         }
     )
 
-    const switchFloor = () => {
-        if(state.showGround) {
-            setState({
-                showGround: false,
-                showFirst: true                
-            })
-        } else {
-            setState({
-                showGround: true,
-                showFirst: false           
-            })
+    const switchFloor = (floor) => {
+        switch(floor) {
+            case 0:
+                setState({ showGround: true, showFirst: false })
+                break;
+            case 1:
+                setState({ showGround: false, showFirst: true })
+                break;
+            default:
+                setState({ showGround: true, showFirst: false })
+                break
         }
     }
-    const { desks, chooseDesk, users, selectedUser } = props;
+    const { desks, chooseDesk, users, selectedUser } = props
+    const groundFloorDesks = desks.filter(desk => desk.floor === 0 )
+    const firstFloorDesks = desks.filter(desk => desk.floor === 1 )
+
     return(
         <React.Fragment>
             <StyledNav className="navbar navbar-light bg-light d-xs-block d-sm-block d-md-block d-lg-block d-xl-none">
                 <div className="container-fluid">
-                    <button className='btn btn-info me-1' onClick={switchFloor}>Ground Floor</button>
-                    <button className='btn btn-info' onClick={switchFloor}>First Floor</button>
+                    <button className='btn btn-info me-1' onClick={() => switchFloor(0)}>Ground Floor</button>
+                    <button className='btn btn-info' onClick={() => switchFloor(1)}>First Floor</button>
                 </div>
             </StyledNav>
             <StyledClickPointsContainer className={'col-xs-12'}>
@@ -86,18 +89,27 @@ export const DesktopApp = (props) => {
                         loadingDesks={desks.length === 0}
                         notUserSelected={selectedUser === null}
                     />
-                    <StyledClickPoints>
-                        {  renderPoints(desks, chooseDesk, users, "mobile") }
-                    </StyledClickPoints>
+
                     {(state.showGround) &&
-                        <StyledImg>
-                            <img className="img-fluid" src={ground} alt='Ground Floor' />
-                        </StyledImg>
+                        <>
+                            <StyledImg>
+                                <img className="img-fluid" src={ground} alt='Ground Floor' />
+                            </StyledImg>
+                            <StyledClickPoints>
+                                {  renderPoints(groundFloorDesks, chooseDesk, users, "mobile") }
+                            </StyledClickPoints>
+                        </>
+                        
                     }
                     {(state.showFirst) &&
-                        <StyledImg>
-                            <img className="img-fluid" src={first} alt='First Floor' />
-                        </StyledImg>
+                        <>
+                            <StyledImg>
+                                <img className="img-fluid" src={first} alt='First Floor' />
+                            </StyledImg>
+                            <StyledClickPoints>
+                                {  renderPoints(firstFloorDesks, chooseDesk, users, "mobile") }
+                            </StyledClickPoints>
+                        </>
                     }
                 </div>
             </StyledClickPointsContainer>
